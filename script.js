@@ -349,4 +349,4 @@ fileUpload.addEventListener('change', (event) => {
 
 // Initialize the floor with default tiles
 loadImageList();
-loadTileSets();
+//loadTileSets();
