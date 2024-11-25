@@ -1,0 +1,65 @@
+body {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#image-label {
+    color: white;
+}
+
+#faces{
+    color: white;
+    font-size: 8pt;
+}
+
+.controls {
+    margin-bottom: 20px;
+    text-align: center;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-direction: column;
+    align-items: baseline;
+    margin-right: 2em;
+}
+
+.floor {
+    display: grid;
+    grid-template-columns: repeat(6, 100px);
+    grid-template-rows: repeat(6, 100px);
+    gap: 1px;
+    border: 2px solid #000;
+    background-color: white;
+}
+
+.tile {
+    width: 100px;
+    height: 100px;
+    background-size: 400px 400px; /* Matches the initial zoom level */
+    background-repeat: no-repeat;
+    transition: transform 0.3s ease; /* Smooth transition for rotation */
+}
+
+.randomize-link, .rotate-link , .bookmatch-link, .rnd-face-link, 
+.reload-face-link, .reload-tileset-link {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    background-color: #444;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.randomize-link:hover, .rotate-link:hover, .bookmatch-link:hover, 
+.rnd-face-link:hover, .reload-face-link:hover, .reload-tileset-link:hover {
+    background-color: #555;
+}
+

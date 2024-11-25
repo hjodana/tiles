@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" xcontent="width=device-width, initial-scale=1.0">
+    <title>Zoomable and Rotatable Tiled Floor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="controls">
+        <div>
+            <label>Col:</label>
+            <select id="nCol">
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6" selected="selected">6</option>
+            </select>
+            <label>Row:</label>
+            <select id="nRow">
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6" selected="selected">6</option>
+            </select>
+        </div>
+        <label for="tile-selector">Choose a tile image:</label>
+        <select id="tile-selector"> </select>
+        <a href="#" class="randomize-link">Reload Tiles</a>
+        <a href="#" class="rotate-link">Randomize Rotation</a>
+        <a href="#" class="bookmatch-link">Bookmatch Rotation</a>
+        <label for="face-selector">Choose a faces collection:</label>
+        <select id="face-selector"> </select>
+        <a href="#" class="reload-face-link">Reload Tile Faces</a>
+        <a href="#" class="reload-tileset-link">All Tile Faces</a>
+        <label for="zoom-slider">Zoom:</label>
+        <input type="text" readonly id="zoom-number" value="400">
+        <input type="range" id="zoom-slider" min="100" max="1200" value="400">
+        <label for="file-upload">Upload an image:</label>
+        <input type="file" id="file-upload" accept="image/jpeg">
+        <div>
+            <label for="background-color-picker">Tile Background Color:</label>
+            <input type="color" id="background-color-picker" value="#ffffff">
+        </div>
+    </div>
+    <div>
+    <label for="div-floor" id="image-label">Image Loaded</label>
+    <div id="div-floor" class="floor"></div>
+    <label id="faces"></label>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
