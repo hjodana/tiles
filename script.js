@@ -67,10 +67,8 @@ backgroundColorPicker.addEventListener('input', (e) => {
 // Populate dropdown with .jpg files from the images folder
 async function loadImageList() {
     try {
-        //const response = await fetch('images/'); // Assuming the `images` folder is publicly accessible
-        const response = fetch('images/'); // Assuming the `images` folder is publicly accessible
-        //const html = await response.text();
-        const html = response.text();
+        const response = await fetch('images/'); // Assuming the `images` folder is publicly accessible
+        const html = await response.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
         const links = Array.from(doc.querySelectorAll('a'))
@@ -351,4 +349,4 @@ fileUpload.addEventListener('change', (event) => {
 
 // Initialize the floor with default tiles
 loadImageList();
-//loadTileSets();
+loadTileSets();
