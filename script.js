@@ -1,5 +1,5 @@
 const floor = document.querySelector('.floor');
-const tileSelector = document.querySelector('#tile-selector');
+const nColRow = document.querySelector("#nColRow")
 const randomizeLink = document.querySelector('.randomize-link');
 const rotateLink = document.querySelector('.rotate-link');
 const bookmatchLink = document.querySelector('.bookmatch-link');
@@ -11,12 +11,10 @@ const reloadTileFace = document.querySelector('.reload-face-link');
 const imageLabel = document.querySelector('#image-label');
 const allTileSet = document.querySelector(".reload-tileset-link")
 const facesLabel = document.querySelector("#faces")
-const nCol = document.querySelector("#nCol")
-const nRow = document.querySelector("#nRow")
 
 const defTileCount = 6*6
 let tileCount = defTileCount
-let currentTileImage = ''; // Default tile image
+let currentTileImage = 'images/tile.jpg'; // Default tile image
 let currentZoom = 400; // Default zoom level
 let tileSets = {}
 let isTileSet = false
@@ -24,36 +22,14 @@ let isAllTileSet = false
 
 const backgroundColorPicker = document.querySelector('#background-color-picker');
 
-nCol.addEventListener('change', (event) => {
-    const numCol = parseInt(event.target.value)
-    tileCount = numCol * parseInt(nRow.value)
-    console.log("nCol: ", numCol, " tileCount: ", tileCount)
-    floor.style.gridTemplateColumns = "repeat(" + numCol + ", 100px)"
-    if (isTileSet) {
-        if (isAllTileSet) {
-            createAllTileSet(tileSets[tileSetSelector.value]);
-        } else {
-            createTileSet(tileSets[tileSetSelector.value]);
-        }
-    } else {
-        createTiles()
-    }
+nColRow.addEventListener('change', (event) => {
+    const numColRow = parseInt(event.target.value)
+    tileCount = numColRow * numColRow
+    floor.style.gridTemplateColumns = "repeat(" + numColRow + ", 100px)"
+    floor.style.gridTemplateRows = "repeat(" + numColRow + ", 100px)"
+    createTiles()
 })
 
-nRow.addEventListener('change', (event) => {
-    const numRow = parseInt(event.target.value)
-    tileCount = numRow * parseInt(nCol.value)
-    floor.style.gridTemplateRows = "repeat(" + numRow + ", 100px)"
-    if (isTileSet) {
-        if (isAllTileSet) {
-            createAllTileSet(tileSets[tileSetSelector.value]);
-        } else {
-            createTileSet(tileSets[tileSetSelector.value]);
-        }
-    } else {
-        createTiles()
-    }
-})
 
 // Apply background color to all tiles
 backgroundColorPicker.addEventListener('input', (e) => {
@@ -64,85 +40,8 @@ backgroundColorPicker.addEventListener('input', (e) => {
     //});
 });
 
-// Populate dropdown with .jpg files from the images folder
-async function loadImageList() {
-    try {
-        const response = await fetch('images/'); // Assuming the `images` folder is publicly accessible
-        const html = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const links = Array.from(doc.querySelectorAll('a'))
-            .map(link => link.getAttribute('href'))
-            .filter(file => file.endsWith('.jpg'));
-
-        // Populate the dropdown menu
-        tileSelector.innerHTML = '';
-        links.forEach( file => {
-            const fileName = file.split('/').pop(); // Extract only the filename
-            const fullPath = `images/${fileName}`;
-            //const dimensions = await getImageDimensions(fullPath); // Retrieve image dimensions
-            const option = document.createElement('option');
-            option.value = 'images/' + fileName; // Full path for the tile image
-            //option.textContent = fileName + " " + dimensions.width + "x" + dimensions.height + "px"; // Only the filename for the dropdown
-            option.textContent = fileName 
-            tileSelector.appendChild(option);
-        });
-
-        // Set the first tile as the default
-        if (links.length > 0) {
-            console.log("links[0] = " + links[0])
-            const fileName = links[0].split('/').pop(); 
-            currentTileImage = 'images/' + fileName;
-            createTiles();
-        }
-    } catch (error) {
-        console.error('Error loading images:', error);
-    }
-}
 
 
-// Populate the tile set selector dropdown
-async function loadTileSets() {
-    try {
-        const response = await fetch('images/faces/');
-        if (!response.ok) throw new Error('Failed to fetch file list');
-
-        const textResult = await response.text();
-        const parser = new DOMParser()
-        const doc = parser.parseFromString(textResult, "text/html")
-        const files = Array.from(doc.querySelectorAll("a"))
-            .map(link => link.getAttribute('href'))
-            .filter(file => file.endsWith("jpg"))
-        //const files = textResult.split('\n').filter(file => file.trim() !== ''); // Split by newline and remove empty lines
-
-        // Group files by their base name
-        tileSets = files.reduce((groups, file) => {
-            const fileName = file.split('/').pop(); // Extract only the filename
-            const baseName = fileName.split('-')[0];
-            if (!groups[baseName]) groups[baseName] = [];
-            //groups[baseName].push(`/uploads/${file}`);
-            groups[baseName].push(fileName);
-            return groups;
-        }, {})
-
-        // Populate the dropdown menu
-        Object.keys(tileSets).forEach(tileSet => {
-            const option = document.createElement('option');
-            console.log("tileset:", tileSet, tileSets[tileSet].length);
-            option.value = tileSet
-            option.textContent = tileSet + " (" + tileSets[tileSet].length + " faces)"  
-            tileSetSelector.appendChild(option);
-        });
-
-        // Load the first tile set by default
-        if (tileSetSelector.options.length > 0) {
-            //by default no loaded, because the normal tile is loaded
-            //createTileSet(tileSets[tileSetSelector.options[0].value]);
-        }
-    } catch (err) {
-        console.error('Error loading tile sets:', err);
-    }
-}
 
 // Function to create tiles
 function createTiles() {
@@ -163,7 +62,7 @@ function createTiles() {
         randomizeTile(tile);
         floor.appendChild(tile);
     }
-    imageLabel.innerHTML = "Tile loaded: " + tileSelector.options[tileSelector.selectedIndex].text
+    imageLabel.innerHTML = "Tile loaded: " + currentTileImage
     facesLabel.innerHTML = ""
     isTileSet = false
 }
@@ -267,16 +166,6 @@ function bookmatchRotation(){
     });
 }
 
-// Event listener for tile selection
-tileSelector.addEventListener('change', (event) => {
-    currentTileImage = event.target.value;
-    createTiles(); // Recreate tiles with the new image
-});
-
-tileSetSelector.addEventListener('change', (event) => {
-    const idx = event.target.value;
-    createTileSet(tileSets[idx]); // Recreate tiles with the new image
-});
 // Event listener for randomize button
 randomizeLink.addEventListener('click', (event) => {
     event.preventDefault();
@@ -342,11 +231,11 @@ fileUpload.addEventListener('change', (event) => {
         option.value = fileURL;
         //option.textContent = file.name + ' ' + dimensions.width + 'x' + dimensions.height + 'px'
         option.textContent = file.name 
-        tileSelector.appendChild(option);
-        tileSelector.value = fileURL;
     }
 });
 
 // Initialize the floor with default tiles
-loadImageList();
-loadTileSets();
+//loadImageList();
+//loadTileSets();
+
+createTiles();
