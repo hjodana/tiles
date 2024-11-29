@@ -6,42 +6,42 @@ const bookmatchLink = document.querySelector('.bookmatch-link');
 const zoomSlider = document.querySelector('#zoom-slider');
 const zoomNumber = document.querySelector('#zoom-number');
 const fileUpload = document.querySelector("#file-upload");
-const tileSetSelector = document.querySelector('#face-selector');
-const reloadTileFace = document.querySelector('.reload-face-link');
 const imageLabel = document.querySelector('#image-label');
-const allTileSet = document.querySelector(".reload-tileset-link")
-const facesLabel = document.querySelector("#faces")
-
-const defTileCount = 6*6
-let tileCount = defTileCount
-let currentTileImage = 'images/tile.jpg'; // Default tile image
-let currentZoom = 400; // Default zoom level
-let tileSets = {}
-let isTileSet = false
-let isAllTileSet = false
-
 const backgroundColorPicker = document.querySelector('#background-color-picker');
 
-nColRow.addEventListener('change', (event) => {
-    const numColRow = parseInt(event.target.value)
-    tileCount = numColRow * numColRow
-    floor.style.gridTemplateColumns = "repeat(" + numColRow + ", 100px)"
-    floor.style.gridTemplateRows = "repeat(" + numColRow + ", 100px)"
-    createTiles()
-})
+let nTile = 6
+let tileCount = nTile * nTile
+let currentTileImage = 'images/tile.jpg'; // Default tile image
+let currentZoom = 100; // Default zoom level
 
+function isTL(n, idx){
+    blockNum = Math.floor(idx/n);
+    posInBlock = idx % n;
+    if (blockNum % 2 == 0 && posInBlock % 2 == 0) return true;
+    else return false;
+}
 
-// Apply background color to all tiles
-backgroundColorPicker.addEventListener('input', (e) => {
-    const color = e.target.value; // Get the selected color
-    floor.style.backgroundColor = color;
-    //document.querySelectorAll('.tile').forEach(tile => {
-    //    tile.style.backgroundColor = color;
-    //});
-});
+function isTR(n, idx){
+    blockNum = Math.floor(idx/n);
+    posInBlock = idx % n;
+    console.log(blockNum, posInBlock)
+    if (blockNum % 2 == 0 && posInBlock % 2 == 1) return true;
+    else return false;
+}
 
+function isBL(n, idx){
+    blockNum = Math.floor(idx/n);
+    posInBlock = idx % n;
+    if (blockNum % 2 == 1 && posInBlock % 2 == 0) return true;
+    else return false;
+}
 
-
+function isBR(n, idx){
+    blockNum = Math.floor(idx/n);
+    posInBlock = idx % n;
+    if (blockNum % 2 == 1 && posInBlock % 2 == 1) return true;
+    else return false;
+}
 
 // Function to create tiles
 function createTiles() {
@@ -54,76 +54,26 @@ function createTiles() {
         // 4 5 6 7
         // 8 9 10 11
         // 12 13 14 15
+        /*
         if ([1, 3, 9, 11].includes(i)) tile.classList.add('TR');
         if ([4, 6, 12, 14].includes(i)) tile.classList.add('BL');
         if ([5, 7, 13, 15].includes(i)) tile.classList.add('BR');
+        */
+        //if (isTL(nTile, i)) tile.classList.add('TL');
+        console.log(isTL(nTile, i))
+        if (isTR(nTile, i)) tile.classList.add('TR');
+        if (isBL(nTile, i)) tile.classList.add('BL');
+        if (isBR(nTile, i)) tile.classList.add('BR');
+
+        tile.style.width = `${currentZoom}px`;
         tile.style.backgroundImage = `url('${currentTileImage}')`;
         tile.style.backgroundSize = `${currentZoom}px ${currentZoom}px`;
         randomizeTile(tile);
         floor.appendChild(tile);
     }
     imageLabel.innerHTML = "Tile loaded: " + currentTileImage
-    facesLabel.innerHTML = ""
-    isTileSet = false
 }
 
-function createTileSet(tileSet) {
-    //tileCount = defTileCount
-    floor.innerHTML = ''; // Clear existing tiles
-    //const tiles = tileSets[tileSet];
-    const tiles = tileSet;
-    console.log("tiles len:", tiles.length);
-    temp = ""
-    resetZoom()
-    for (let i = 0; i < tileCount; i++) {
-        const tile = document.createElement('div');
-        tile.classList.add('tile');
-        const randomIdx = Math.floor(Math.random() * tiles.length);
-        const randomFace = tiles[randomIdx];
-        tile.style.backgroundImage = `url('images/faces/${randomFace}')`;
-        tile.style.width = "100px"
-        tile.style.height = "100px"
-        tile.style.backgroundPosition = `0px 0xp`
-        tile.style.backgroundSize = "100px 100px"
-        //randomizeTile(tile); // Optionally rotate the tile
-        //tile.style.width = `${currentZoom / tileCount}px`;
-        //tile.style.height = `${currentZoom / tileCount}px`;
-        floor.appendChild(tile);
-        temp = temp + String.fromCharCode(randomIdx+65) + ", "
-    }
-    imageLabel.innerHTML = "Tile set loaded: " + tileSetSelector.options[tileSetSelector.selectedIndex].text
-    facesLabel.innerHTML = "faces loaded: " + temp
-    isTileSet = true
-    isAllTileSet = false
-}
-
-function createAllTileSet(tileSet) {
-    tileCount = tileSet.length
-    floor.innerHTML = ''; // Clear existing tiles
-    //const tiles = tileSets[tileSet];
-    const tiles = tileSet;
-    resetZoom();
-    for (let i = 0; i < tileCount; i++) {
-        const tile = document.createElement('div');
-        tile.classList.add('tile');
-        //const randomFace = tiles[Math.floor(Math.random() * tiles.length)];
-        tileFace = tiles[i]
-        tile.style.backgroundImage = `url('images/faces/${tileFace}')`;
-        tile.style.width = "100px"
-        tile.style.height = "100px"
-        tile.style.backgroundPosition = `0px 0xp`
-        tile.style.backgroundSize = "100px 100px"
-
-        //randomizeTile(tile); // Optionally rotate the tile
-        //tile.style.width = `${currentZoom / tileCount}px`;
-        //tile.style.height = `${currentZoom / tileCount}px`;
-        floor.appendChild(tile);
-    }
-    imageLabel.innerHTML = "Original tile set loaded: " + tileSetSelector.options[tileSetSelector.selectedIndex].text
-    facesLabel.innerHTML = ""
-    isTileSet = true
-    isAllTileSet = true
-}
 
 // Function to get image dimensions
 function getImageDimensions(src) {
@@ -140,6 +90,7 @@ function randomizeTile(tile) {
     const x = Math.floor(Math.random() * (currentZoom - 100)); // Random X position
     const y = Math.floor(Math.random() * (currentZoom - 100)); // Random Y position
     tile.style.backgroundPosition = `-${x}px -${y}px`;
+    tile.style.transform = "none"
 }
 
 // Function to randomize rotation (rotate by 90 degrees)
@@ -172,17 +123,6 @@ randomizeLink.addEventListener('click', (event) => {
     const tiles = document.querySelectorAll('.tile');
     tiles.forEach(tile => randomizeTile(tile)); // Randomize each existing tile
 });
-
-reloadTileFace.addEventListener("click", (event) => {
-    event.preventDefault();
-    const idx = tileSetSelector.value
-    createTileSet(tileSets[idx]);
-})
-
-allTileSet.addEventListener("click", (event) => {
-    event.preventDefault();
-    createAllTileSet(tileSets[tileSetSelector.value]);
-})
 
 
 // Event listener for rotation button
@@ -234,8 +174,22 @@ fileUpload.addEventListener('change', (event) => {
     }
 });
 
-// Initialize the floor with default tiles
-//loadImageList();
-//loadTileSets();
+nColRow.addEventListener('change', (event) => {
+    nTile = parseInt(event.target.value)
+    tileCount = nTile * nTile
+    floor.style.gridTemplateColumns = "repeat(" + nTile + ", 100px)"
+    floor.style.gridTemplateRows = "repeat(" + nTile + ", 100px)"
+    createTiles()
+})
+
+// Apply background color to all tiles
+backgroundColorPicker.addEventListener('input', (e) => {
+    const color = e.target.value; // Get the selected color
+    floor.style.backgroundColor = color;
+    //document.querySelectorAll('.tile').forEach(tile => {
+    //    tile.style.backgroundColor = color;
+    //});
+});
+
 
 createTiles();

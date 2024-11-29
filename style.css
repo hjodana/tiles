@@ -8,6 +8,20 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+select {
+    padding: 4px;
+    background-color: green;
+    text-align: center;
+    font-size: 18px;
+    width: 6em;
+    border-radius: 6px;
+    color: white;
+}
+
+label {
+    font-size: 18px;
+}
+
 #image-label {
     color: white;
 }
@@ -51,7 +65,7 @@ body {
     color: white;
     text-decoration: none;
     font-size: 18px;
-    background-color: #444;
+    background-color: green;
     padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;

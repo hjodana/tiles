@@ -9,23 +9,19 @@
 <body>
     <div class="controls">
         <div>
-            <label>n * n</label>
+            <label for="nColRow">Floor Size: </label>
             <select id="nColRow">
                 <option value="4">4 x 4</option>
                 <option value="5">5 x 5</option>
-                <option value="6">6 x 6</option>
+                <option value="6" selected="selected">6 x 6</option>
             </select>
         </div>
         <a href="#" class="randomize-link">Reload Tiles</a>
         <a href="#" class="rotate-link">Randomize Rotation</a>
         <a href="#" class="bookmatch-link">Bookmatch Rotation</a>
-        <label for="face-selector">Choose a faces collection:</label>
-        <select id="face-selector"> </select>
-        <a href="#" class="reload-face-link">Reload Tile Faces</a>
-        <a href="#" class="reload-tileset-link">All Tile Faces</a>
         <label for="zoom-slider">Zoom:</label>
-        <input type="text" readonly id="zoom-number" value="400">
-        <input type="range" id="zoom-slider" min="100" max="1200" value="400">
+        <input type="text" readonly id="zoom-number" value="100">
+        <input type="range" id="zoom-slider" min="100" max="1200" value="100">
         <label for="file-upload">Upload an image:</label>
         <input type="file" id="file-upload" accept="image/jpeg">
         <div>
@@ -34,9 +30,8 @@
         </div>
     </div>
     <div>
-    <label for="div-floor" id="image-label">Image Loaded</label>
+    <span id="image-label">Image Loaded</span>
     <div id="div-floor" class="floor"></div>
-    <label id="faces"></label>
     </div>
 
     <script src="script.js"></script>
